@@ -1,5 +1,4 @@
-ARG REGISTRY_NAME
-FROM ${REGISTRY_NAME}/baseimages/python:3.5
+FROM registry.docker.io/python:3.5
 
 ADD app /app
 
