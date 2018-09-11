@@ -7,6 +7,7 @@ import tensorflow as tf
 from PIL import Image
 import numpy as np
 import sys
+import pprint
 
 filename = 'model.pb'
 labels_filename = 'labels.txt'
@@ -202,7 +203,7 @@ def predict_image(image):
                 'predictions': result 
             }
 
-            log_msg("Results: " + str(response))
+            log_msg("Results: \n" + pprint.pformat(response, indent=2))
             return response
             
     except Exception as e:
