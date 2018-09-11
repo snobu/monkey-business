@@ -1,7 +1,7 @@
 # This should not be UTF-8 BOM but ASCII
 # because of a tiny ACR parser bug
 
-FROM python:3.5
+FROM python:3.6
 
 ADD app /app
 
