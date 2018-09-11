@@ -93,7 +93,7 @@ def predict_url_handler(project=None):
 
         resp = make_response(jsonify(results))
         resp.headers['X-Operation-Id'] = operation_id
-        return jsonify(results)
+        return resp
     except Exception as e:
         print('EXCEPTION:', str(e))
         return 'Error processing image'
