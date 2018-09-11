@@ -21,6 +21,7 @@ app.config['APPINSIGHTS_INSTRUMENTATIONKEY'] = os.environ.get('INSTRUMENTATION_K
 
 # log requests, traces and exceptions to Azure Application Insights
 appinsights = AppInsights(app)
+tc = app.wsgi_app.client
 
 # 4MB Max image size limit
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
@@ -38,7 +39,6 @@ def index():
 @app.route('/<project>/image/nostore', methods=['POST'])
 def predict_image_handler(project=None):
     operation_id = '%09x' % random.randrange(16**9)
-    tc = app.wsgi_app.client
     tc._context.operation._values['ai.operation.id'] = operation_id
     try:
         imageData = None
@@ -58,7 +58,6 @@ def predict_image_handler(project=None):
             'tagName': results['predictions'][0]['tagName'],
             'confidence': results['predictions'][0]['probability']
         }
-
         tc.track_trace('Inference result for request {id}'
             .format(id=operation_id), predictions)
 
@@ -77,9 +76,23 @@ def predict_image_handler(project=None):
 @app.route('/<project>/url', methods=['POST'])
 @app.route('/<project>/url/nostore', methods=['POST'])
 def predict_url_handler(project=None):
+    operation_id = '%09x' % random.randrange(16**9)
+    tc._context.operation._values['ai.operation.id'] = operation_id
     try:
+        print('\n\nOperation Id: {id}\n'.format(id=operation_id))
+
         image_url = json.loads(request.get_data().decode('utf-8'))['url']
         results = predict_url(image_url)
+
+        predictions = {
+            'tagName': results['predictions'][0]['tagName'],
+            'confidence': results['predictions'][0]['probability']
+        }
+        tc.track_trace('Inference result for request {id}'
+            .format(id=operation_id), predictions)
+
+        resp = make_response(jsonify(results))
+        resp.headers['X-Operation-Id'] = operation_id
         return jsonify(results)
     except Exception as e:
         print('EXCEPTION:', str(e))
