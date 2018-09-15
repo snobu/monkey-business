@@ -12,7 +12,7 @@ Then use your favorite tool to connect to the end points.
 
 ### POST as multipart/form-data using the imageData key &mdash;
 
-    curl -X POST http://127.0.0.1/image -F imageData=@some_file_name.jpg
+    curl -X POST http://127.0.0.1/image -F imageData=@image.jpg
 
 ### POST as application/octet-stream &mdash;
 
@@ -20,4 +20,4 @@ Then use your favorite tool to connect to the end points.
 
 ### POST http://127.0.0.1/url with image URL as body &mdash;
 
-    curl -X POST http://127.0.0.1/url -d '{ "url": "<test url here>" }'
+    curl -X POST http://127.0.0.1/url -d '{ "url": "<image url>" }'
