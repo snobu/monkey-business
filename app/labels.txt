@@ -1,4 +1,3 @@
 cacajao_calvus
-cebuella_pygmea
-cebus_capucinus
+chewie
 macaca_fuscata
